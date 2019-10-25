@@ -3,11 +3,12 @@ class TasksController < ApplicationController
   before_action :correct_user, only: [:update, :destroy]
   
   def index
-    @tasks = Task.all.page(params[:page]).per(10)
+    #@tasks = Task.all.page(params[:page]).per(10)
+    @tasks = Task.where(user_id: current_user.id).page(params[:page]).per(10)
   end
 
   def show
-    @task = Task.find(params[:id])
+    set_task
   end
 
   def new
@@ -21,23 +22,26 @@ class TasksController < ApplicationController
       redirect_to root_url
     else
       flash.now[:danger] = 'タスクが投稿されませんでした'
-      render 'toppages/index'
+      render 'new'
     end
   end
 
   def edit
-    @task = Task.find(params[:id])
+    set_task
+    if @task.user_id != current_user.id 
+      redirect_to root_url, alert: "ユーザーが違います。"
+    end  
   end
 
   def update
-    @task.update(task_params)
+    set_task
     
     if @task.update(task_params)
         flash[:success] = 'タスクが更新されました'
         redirect_to root_url
     else
         flash.now[:danger] = 'タスクが更新されませんでした'
-        render 'toppages/index'
+        render 'new'
     end
   end
  

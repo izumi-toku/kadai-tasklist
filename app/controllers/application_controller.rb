@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   def require_user_logged_in
     unless logged_in?
-      render 'toppages/index'
+      redirect_to login_url
     end
   end
 end
