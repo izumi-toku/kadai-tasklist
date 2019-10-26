@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :require_user_logged_in
-  before_action :correct_user, only: [:update, :destroy]
+  before_action :correct_user, only: [:show, :edit, :update, :destroy]
   
   def index
     #@tasks = Task.all.page(params[:page]).per(10)
@@ -8,10 +8,6 @@ class TasksController < ApplicationController
   end
 
   def show
-     set_task
-     if @task.user_id != current_user.id 
-      redirect_to root_url, alert: "ユーザーが違います。"
-     end
   end
 
 
@@ -31,7 +27,6 @@ class TasksController < ApplicationController
   end
 
   def edit
-    set_task
   end
 
   def update
