@@ -8,8 +8,12 @@ class TasksController < ApplicationController
   end
 
   def show
-    set_task
+     set_task
+     if @task.user_id != current_user.id 
+      redirect_to root_url, alert: "ユーザーが違います。"
+     end
   end
+
 
   def new
     @task = Task.new
@@ -28,9 +32,6 @@ class TasksController < ApplicationController
 
   def edit
     set_task
-    if @task.user_id != current_user.id 
-      redirect_to root_url, alert: "ユーザーが違います。"
-    end  
   end
 
   def update
